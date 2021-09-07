@@ -1,0 +1,146 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+/**
+ * Cryptographic encoding functions.
+ *
+ * Diego Méndez Medina.
+ */
+
+/********************** b2 **********************/
+
+/********************** HEX **********************/
+
+/* encodes string into hex and returns it*/
+char* encode_hex(char *p, int size)
+{
+  char aux; 
+  int i, j;
+  char *hex = malloc(2*size);
+  unsigned int mask = 15;
+
+  for(i = 0, j = 0; i < size; i++){
+    aux = *p;
+    /* In case the byte is 0000, '\0' will be stored on hex.
+       But hex is not consider a string so that '\0' is not the end of 
+       the hex representation, consider this during the printing, take
+       in mind the size of the initial string. */
+    hex[j++] = aux >> 4;
+    hex[j++] = aux & mask;
+    p++;
+  }
+
+  return hex;
+}
+
+
+/*  printing the bytes as hex */
+void print_hex(char *hex, int size)
+{
+  int i;
+
+  for(i = 0; i < size; i++)
+    if(hex[i]>0 && hex[i] < 10)
+      printf("%d", hex[i]);
+    else
+      switch(hex[i]){
+      case'\0':
+	printf("0");
+	break;
+      case 10:
+	printf("A");
+	break;
+      case 11:
+	printf("B");
+	break;
+      case 12:
+	printf("C");
+	break;
+      case 13:
+	printf("D");
+	break;
+      case 14:
+	printf("E");
+	break;
+      case 15:
+	printf("F");
+	break;
+      default:
+	printf("?");
+	break;
+      }
+  printf("\n");
+}
+
+/********************** b64 **********************/
+/* get64mask: returns the int value that will mask the bit to obtain the sextet */
+unsigned get_64mask(int cont)
+{
+  if(cont==2)
+    return 3;
+  else if(cont==4)
+    return 15;
+  return 63;
+}
+
+/* encode_b64: encodes text to base 64 and returns it*/
+char* encode_b64(char* text, int size)
+{
+  int i, j, bl;
+  char *b64;
+  unsigned aux, mask, cont, prev, val;
+  
+  bl = ceil(size*4/3);     // base64 length = ceil(n*4/6)
+  b64 = calloc(bl, 1);
+  mask = 3;                // mask to get the bits that are not used in a sextet
+  cont = 2;                // first n bits to form the next sexteto
+  prev = 0;                // next value of the n=cont bits that were not used in the last sextet
+  i = j = 0;
+
+  while(j<=bl){
+  
+    if(i<size){
+      aux = text[i] & mask;
+      val = text[i] >> cont;
+      
+      if(cont != 2)
+	val += prev;
+      else if(prev != 0) // for every cont = 2 except the first
+	  b64[j++] = prev;
+      
+      b64[j++] = val;
+      prev = aux<<(6-cont);
+    }
+    else{
+      aux = (cont==2)? 0 : cont;
+      b64[j++] = (text[size-1]<<aux)&63;
+    }
+    
+    cont = (cont==6)? 2:((cont+2)%8);  
+    mask = get_64mask(cont);
+    i++;
+  }
+  return b64;
+}
+
+/* Prints the b64 representation of the bytes */
+void print_b64(char* b64, int size)
+{
+  int i = ceil(size*4/3.0);
+
+  for(int j = 0; j < i; j++){
+    if(b64[j] <= 25)
+      printf("%c", b64[j]+65);
+    else if(b64[j] <= 51)
+      printf("%c", b64[j]+71);
+    else if(b64[j] <= 61)
+      printf("%c", b64[j]-4);
+    else if(b64[j] == 62)
+      printf("%c", 42);
+    else
+      printf("%c", 47);
+  }
+  printf("\n");
+}
+

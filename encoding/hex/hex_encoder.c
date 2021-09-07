@@ -11,9 +11,8 @@
 
 #define MAXLINE 1001                //max length of the input
 
-char* encode_hex(char*, int);     
+char* encode_hex(char *, int);
 void pretty_printing(char*, int);
-
 int main()
 {
   char text[MAXLINE], *hex;
@@ -97,4 +96,3 @@ void pretty_printing(char *hex, int size)
       }
   printf("\n");
 }
-

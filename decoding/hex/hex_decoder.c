@@ -11,17 +11,17 @@
  * contact: diegomm@ciencias.unam.mx
  *          @DiegoMendezMedina on github          
  */
+
 #define MAXLINE 1000 // max length of the input
 
 char* decode_hex(char*, int);
-void pretty_printing(char*, int);
-  
+
 /* hex decoder*/
 int main()
 {
   int t, i;
   char hex[MAXLINE], *text;
-  
+
   i = 0;
   while((t = getchar()) != EOF && i<MAXLINE){
     if(isdigit(t))
@@ -46,6 +46,9 @@ int main()
       case 'F':
 	hex[i] = 15;
 	break;
+      case 0:
+	hex[i] = 0;
+	break;
       }
     i++;
   }
@@ -67,7 +70,7 @@ int main()
 char* decode_hex(char* hex, int size)
 {
   int i, j;
-  unsigned int mask = 15;
+  unsigned mask = 15;
   char * text = malloc((size)/2);
   
   j = 0;
