@@ -13,7 +13,7 @@ char* decode_hex(char* hex, int size)
 {
   int i, j;
   unsigned mask = 15;
-  char * text = malloc((size)/2);
+  char * text = malloc(size/2);
   
   j = 0;
   for(i = 0; j < size; i++){

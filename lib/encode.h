@@ -144,3 +144,29 @@ void print_b64(char* b64, int size)
   printf("\n");
 }
 
+/********************** XOR **********************/
+
+/* takes two string with same length and returns it's xor combination as 
+   a string 
+   Note: length, size of both strings.
+*/
+char* xor(char* d1, char* d2, int length)
+{
+  int i, j, sum;
+  char *xor, a, b, mask;
+
+  xor = malloc(length);
+
+  sum = 0;
+  for(j = 0; j < length; xor[j++] = sum, sum = 0)
+    for(i = 7; i>=0; i--){
+      mask = 1<<i;
+      a = d1[j] & mask;
+      b = d2[j] & mask;
+      if(a!=b)
+	sum += mask;
+    }
+  
+  xor[j] = '\0';
+  return xor;
+}

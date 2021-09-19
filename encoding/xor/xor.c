@@ -39,7 +39,7 @@ int main()
     return 0;
   }
 
-  xor = XOR(decode1, decode2, i);
+  xor = XOR(decode1, decode2, i/2);
   r = encode_hex(xor, i);
 
   print_hex(r, i);
@@ -52,17 +52,20 @@ int main()
   return 0;
 }
 
-/* takes two string with same length and returns it's xor combination as a string */
+/* takes two string with same length and returns it's xor combination as 
+   a string. 
+   Note: the length value is half of the buffer received, since 
+   two hex values represent one binary*/
 char* XOR(char *d1, char *d2, int length)
 {
   int i, j, sum;
   char *xor, a, b, mask;
-  
+
   xor = malloc(length);
 
   sum = 0;
   for(j = 0; j < length; xor[j++] = sum, sum = 0)
-    for(i = 6; i>=0; i--){
+    for(i = 7; i>=0; i--){
       mask = 1<<i;
       a = d1[j] & mask;
       b = d2[j] & mask;
