@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <math.h>
 #include "../../lib/encode.h"
 #include "../../lib/decode.h"
 
@@ -39,7 +40,7 @@ int main()
     return 0;
   }
 
-  xor = XOR(decode1, decode2, i/2);
+  xor = XOR(decode1, decode2, ceil(i/2.0));
   r = encode_hex(xor, i);
 
   print_hex(r, i);
@@ -61,7 +62,7 @@ char* XOR(char *d1, char *d2, int length)
   int i, j, sum;
   char *xor, a, b, mask;
 
-  xor = malloc(length);
+  xor = calloc(length*2, 1);
 
   sum = 0;
   for(j = 0; j < length; xor[j++] = sum, sum = 0)
@@ -72,7 +73,7 @@ char* XOR(char *d1, char *d2, int length)
       if(a!=b)
 	sum += mask;
     }
-  
-  xor[j] = '\0';
+  if(j<length+1)
+    xor[j] = '\0';
   return xor;
 }

@@ -37,7 +37,7 @@ int main()
 }
 
 /* encodes string into hex and returns it*/
-char* encode_hex(char *p, int size)
+char* encode_hex(char p[], int size)
 {
   char aux; 
   int i, j;
@@ -45,14 +45,13 @@ char* encode_hex(char *p, int size)
   unsigned int mask = 15;
 
   for(i = 0, j = 0; i < size; i++){
-    aux = *p;
+    aux = p[i];
     /* In case the byte is 0000, '\0' will be stored on hex.
        But hex is not consider a string so that '\0' is not the end of 
        the hex representation, consider this during the printing, take
        in mind the size of the initial string. */
     hex[j++] = aux >> 4;
     hex[j++] = aux & mask;
-    p++;
   }
 
   return hex;

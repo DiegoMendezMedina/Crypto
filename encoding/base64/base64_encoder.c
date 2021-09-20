@@ -45,25 +45,28 @@ char* encode_b64(char* text, int size)
   char *b64;
   unsigned aux, mask, cont, prev, val;
   
-  bl = ceil(size*4/3);     // base64 length = ceil(n*4/6)
+  bl = ceil(size*4/3.0);     // base64 length = ceil(n*8/6)
   b64 = calloc(bl, 1);
   mask = 3;                // mask to get the bits that are not used in a sextet
   cont = 2;                // first n bits to form the next sexteto
   prev = 0;                // next value of the n=cont bits that were not used in the last sextet
   i = j = 0;
 
-  while(j<=bl){
+  while(j<bl){
   
-    if(i<size){
+    if(i<=size){
       aux = text[i] & mask;
       val = text[i] >> cont;
       
-      if(cont != 2)
+      if(cont != 2){
 	val += prev;
+
+      }
       else if(prev != 0) // for every cont = 2 except the first
 	  b64[j++] = prev;
-      
-      b64[j++] = val;
+
+      if(j<bl)
+	b64[j++] = val;
       prev = aux<<(6-cont);
     }
     else{
