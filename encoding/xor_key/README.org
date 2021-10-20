@@ -1,0 +1,8 @@
+* Repeating-key XOR
+  Solution to the challenge 5, first set of the cryptopals crypto challenges.
+  
+** Compiling
+   gcc repeating_key_xor.c -o exe -lm
+
+** Proper executing 
+  ./exe -p ICE < in.txt
