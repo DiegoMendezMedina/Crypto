@@ -2,7 +2,7 @@
   Solution to the challenge 5, first set of the cryptopals crypto challenges.
   
 ** Compiling
-   gcc repeating_key_xor.c -o exe -lm
+   make xor_encode
 
-** Proper executing 
-  ./exe -p ICE < in.txt
+** Execution 
+  ./xor_encode -p ICE < in.txt

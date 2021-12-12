@@ -5,18 +5,16 @@
 #include "../../lib/decode.h"
 
 /**
- * This programs encodes the file received using 
- * repeating-key XOR with the key, received on the standard 
- * input.
+ * This programs encodes from the standard input
+ * repeating-key XOR with the key.
  * Proper execution: ./exe -p password 
- * Terminal Version.
  */
 
-#define MAXLENGTH 1000
+#define MAXLENGTH 10000
 #define MAXPSWD 100
 char* rep_xor(char*, char *);
 
-/* Reapeating key xor */
+/* Encoding Reapeating key xor */
 int main(int argc, char* argv[])
 {
   int i, j;
@@ -48,11 +46,10 @@ int main(int argc, char* argv[])
     j++;
   in[j-1] = '\0';
   j--;
-  
+
   xor = rep_xor(in, argv[i+1]);
   r = encode_hex(xor, 2*j);
   print_hex(r, 2*j);
-
   free(xor);
   free(r);
   return 0;
