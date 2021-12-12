@@ -1,0 +1,8 @@
+* Decoding Repeating-key xor
+  Decodes an repeating-key XOR cipher, given the key.
+
+** Compiling 
+   make xor_decode
+
+** Execution
+   ./xor_decode -p ICE < in.txt
