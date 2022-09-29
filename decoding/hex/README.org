@@ -1,6 +1,6 @@
 * /HEX/ decoder 
 
-  Reads from the IO a unique string hexadecimal representation 
+  Reads from the IO a unique hexadecimal string representation 
   and prints it's decoding. 
 
 ** Compile and execute   
