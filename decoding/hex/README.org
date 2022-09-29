@@ -12,3 +12,6 @@
     =Crypto/decoding/hex/$= ~gcc -o exe hex_decoder.c ../../lib/decode.c -lm~
 
     =Crypto/decoding/hex/$= ~./exe~
+
+** Clean 
+   =Crypto/decoding/hex/$= ~make clean~
