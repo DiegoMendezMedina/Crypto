@@ -1,10 +1,8 @@
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include "../../lib/decode.h"
 
 /**
- * this program receives the hex code from the standard input as string
+ * this program receives the hex code from the standard input
  * and decodes it.
  *
  * @author Diego Méndez Medina 
@@ -12,17 +10,40 @@
  *          @DiegoMendezMedina on github          
  */
 
-#define MAXLINE 1000 // max length of the input
-
-char* decode_hex(char*, int);
+int read_hex(char*);
 
 /* hex decoder*/
 int main()
 {
-  int t, i;
+  int i;
   char hex[MAXLINE], *text;
 
-  i = 0;
+  i = read_hex(hex);
+  
+  if(i<0){
+    printf("Saca\n");
+    return -1;
+  }
+  
+  text = decode_hex(hex, i);
+  printf("%s\n", text);
+  free(text);
+  return 0;
+}
+
+/**
+ * read_hex: reads from the standard input and 
+ *           saves its hexadecimal value into hex.
+ *
+ * @param hex, char*. Where the proper value will be stored.
+ * 
+ * @return 0 if the Input is a proper hex string representation.
+ * @return -1 if not.
+ */
+int read_hex(char* hex)
+{
+  int t, i;
+    i = 0;
   while((t = getchar()) != EOF && i<MAXLINE){
     if(isdigit(t))
       hex[i] = t-'\0'-48;
@@ -49,36 +70,19 @@ int main()
       case 0:
 	hex[i] = 0;
 	break;
+      case '\n':
+	return i;
+      default:
+	printf("error: string received is not in hex form\n");
+	return -1;
       }
     i++;
   }
   
   if(i==MAXLINE){
     printf("error: input exceeded MAXLINE\n");
-    return 0;
+    return -1;
   } 
-  if(hex[i-1] == '\n') // Deleting the new line from the standard input
-    i--;
-  
-  text = decode_hex(hex, i);
-  printf("%s\n", text);
-  free(text);
-  return 0;
-}
 
-/* decodes the hex code and returns it as a string*/
-char* decode_hex(char* hex, int size)
-{
-  int i, j;
-  unsigned mask = 15;
-  char * text = malloc((size)/2);
-  
-  j = 0;
-  for(i = 0; i <(size-1)/2; i++){
-    int aux = hex[j++]<<4;        
-    int aux2 = hex[j++] &mask;
-    text[i] = aux+aux2;
-  }
-  text[i] = '\0';
-  return text;
+  return i;
 }

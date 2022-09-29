@@ -1,63 +1,51 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdio.h>
 
 /**
  * Cryptographic decoding functions.
  *
- * Diego Méndez Medina.
+ * @author Diego Méndez Medina.
  */
 
+#define MAXLINE 10000 // max length of the input
+
 /* decodes the hex code and returns it as a string*/
-char* decode_hex(char* hex, int size)
+char* decode_hex(char* hex, int size);
+
+/**
+ * hamming_distance: 
+ * 
+ * @params s1, s2: strings.
+ * @return -1 if the lengths of the strings
+ *         are different, otherwise the hamming
+ *         distance, >= 0.
+ **/
+/*
+int hamming_distance(char *s1, char *s2)
 {
-  int i, j;
-  unsigned mask = 15;
-  char * text = malloc(size/2);
+  int dis, i, l1, l2, j;
+  unsigned char mask, c1, c2;
   
-  j = 0;
-  for(i = 0; j < size; i++){
-    int aux = hex[j++]<<4;        
-    int aux2 = hex[j++] &mask;
-    text[i] = aux+aux2;
-  }
-  text[i] = '\0';
-  return text;
-}
+  l1 = strlen(s1);
+  l2= strlen(s2);
 
-/* gets the proper value of the string and stores it in hex*/
-void string_to_hex(char *s, char *hex, int length)
-{
-  int t, i;
-
-  i = 0;
-  while((t = s[i]) != '\0'){
-    if(isdigit(t))
-      hex[i] = t-'\0'-48;
-    else
-      switch(toupper(t)){
-      case 'A':
-	hex[i] = 10;
-	break;
-      case 'B':
-	hex[i] = 11;
-	break;
-      case 'C':
-	hex[i] = 12;
-	break;
-      case 'D':
-	hex[i] = 13;
-	break;
-      case 'E':
-	hex[i] = 14;
-	break;
-      case 'F':
-	hex[i] = 15;
-	break;
-      case 0:
-	hex[i] = 0;
-	break;
-      }
-    i++;
+  if(l1 != l2){
+    printf("Strings with different length\n");
+    return -1;
   }
+
+  dis = 0;
+  for(i = 0; i < l1; i++)
+    for(j = 0; j < 8; j++){
+      mask = 1 << j;
+      c1 = s1[i] & mask;
+      c2 = s2[i] & mask;
+      if(c1 != c2)
+	dis++;
+    }
+  
+  return dis;
 }
+*/
