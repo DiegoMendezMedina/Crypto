@@ -9,6 +9,6 @@
     ~make~
 
 *** Whithout Make
-    /Crypto/decoding/hex/$/ ~gcc -o exe hex_decoder.c ../../lib/decode.c -lm~
+    =Crypto/decoding/hex/$= ~gcc -o exe hex_decoder.c ../../lib/decode.c -lm~
 
     =Crypto/decoding/hex/$= ~./exe~
