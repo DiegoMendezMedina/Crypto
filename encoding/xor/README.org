@@ -1,0 +1,17 @@
+* /Fixed XOR/ 
+
+  Reads from the IO two equal-length buffers/strings 
+  and produces their XOR combination.
+
+** Compile and execute   
+
+*** With Make
+    ~make~ 
+
+*** Whithout Make
+    =Crypto/encoding/xor/$= ~gcc -o exe xor.c ../../lib/decode.c ../../lib/encode.c -lm~
+
+    =Crypto/encoding/xor/$= ~./exe~
+
+** Clean 
+   =Crypto/encoding/xor/$= ~make clean~
