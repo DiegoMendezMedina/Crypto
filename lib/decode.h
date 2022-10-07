@@ -9,10 +9,27 @@
  * @author Diego Méndez Medina.
  */
 
-#define MAXLINE 10000 // max length of the input
+#ifndef MAXLINE
+#define MAXLINE 10000
+#endif
+
+#ifndef MAXBUFF
+#define MAXBUFF 10000
+#endif
+
+/***** HEX *****/
 
 /* decodes the hex code and returns it as a string*/
 char* decode_hex(char* hex, int size);
+
+
+/** 
+ * string_to_hex: gets the proper value of the string and stores it in hex.
+ * @param s, string: string hex representation.
+ * @param hex, array of bytes: array where the proper hex value will be stored.
+ * @param length, 
+*/
+void string_to_hex(char *s, char *hex, int length);
 
 /**
  * hamming_distance: 

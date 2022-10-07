@@ -19,10 +19,8 @@ int main()
 
   i = read_hex(hex);
   
-  if(i<0){
-    printf("Saca\n");
+  if(i<0)
     return -1;
-  }
   
   text = decode_hex(hex, i);
   printf("%s\n", text);

@@ -1,7 +1,7 @@
 #include "decode.h"
 
 /**
- * See decode.h for documentation
+ * See decode.h for documentation 
  */
 
 
@@ -22,3 +22,38 @@ char* decode_hex(char* hex, int size)
   return text;
 }
 
+void string_to_hex(char *s, char *hex, int length)
+{
+  int t, i;
+
+  i = 0;
+  while((t = s[i]) != '\0'){
+    if(isdigit(t))
+      hex[i] = t-'\0'-48;
+    else
+      switch(toupper(t)){
+      case 'A':
+	hex[i] = 10;
+	break;
+      case 'B':
+	hex[i] = 11;
+	break;
+      case 'C':
+	hex[i] = 12;
+	break;
+      case 'D':
+	hex[i] = 13;
+	break;
+      case 'E':
+	hex[i] = 14;
+	break;
+      case 'F':
+	hex[i] = 15;
+	break;
+      case 0:
+	hex[i] = 0;
+	break;
+      }
+    i++;
+  }
+}

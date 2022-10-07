@@ -1,172 +1,81 @@
-#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include <math.h>
+#include <stdio.h>
+
+#ifndef MAXLINE
+#define MAXLINE 10000
+#endif
+
+#ifndef MAXBUFF
+#define MAXBUFF 10000
+#endif
 
 /**
  * Cryptographic encoding functions.
  *
- * Diego Méndez Medina.
+ * @author Diego Méndez Medina.
  */
 
 /********************** b2 **********************/
 
 /********************** HEX **********************/
 
-/* encodes string into hex and returns it*/
-char* encode_hex(char *p, int size)
-{
-  char aux; 
-  int i, j;
-  char *hex = malloc(2*size);
-  unsigned int mask = 15;
-
-  for(i = 0, j = 0; i < size; i++){
-    aux = *p;
-    /* In case the byte is 0000, '\0' will be stored on hex.
-       But hex is not consider a string so that '\0' is not the end of 
-       the hex representation, consider this during the printing, take
-       in mind the size of the initial string. */
-    hex[j++] = aux >> 4;
-    hex[j++] = aux & mask;
-    p++;
-  }
-
-  return hex;
-}
+/**
+ * encode_hex: encodes string and returns it 
+ *            as an array of bytes.
+ * 
+ * @param p, string: string to encode.
+ * @param length, int: length of the string;
+ * 
+ */
+char* encode_hex(char *p, int length);
 
 
-/*  printing the bytes as hex */
-void print_hex(char *hex, int size)
-{
-  int i;
+/**
+ * print_hex: prints the representation of an 
+ *            array of bytes encodes in hex.
+ *
+ * @param hex, array of bytes: bytes to print.
+ * @param size, int. size of the array.
+ */
+void print_hex(char *hex, int size);
 
-  for(i = 0; i < size; i++)
-    if(hex[i]>0 && hex[i] < 10)
-      printf("%d", hex[i]);
-    else
-      switch(hex[i]){
-      case'\0':
-	printf("0");
-	break;
-      case 10:
-	printf("A");
-	break;
-      case 11:
-	printf("B");
-	break;
-      case 12:
-	printf("C");
-	break;
-      case 13:
-	printf("D");
-	break;
-      case 14:
-	printf("E");
-	break;
-      case 15:
-	printf("F");
-	break;
-      default:
-	printf("?");
-	break;
-      }
-  printf("\n");
-}
 
 /********************** b64 **********************/
-/* get64mask: returns the int value that will mask the bit to obtain the sextet */
-unsigned get_64mask(int cont)
-{
-  if(cont==2)
-    return 3;
-  else if(cont==4)
-    return 15;
-  return 63;
-}
+/**
+ * get64mask: returns the int value that will mask the bit to obtain the sextet 
+ *
+ * @param cont, int. current iteration.
+ */
+unsigned get_64mask(int cont);
 
-/* encode_b64: encodes text to base 64 and returns it*/
-char* encode_b64(char* text, int size)
-{
-  int i, j, bl;
-  char *b64;
-  unsigned aux, mask, cont, prev, val;
-  
-  bl = ceil(size*4/3);     // base64 length = ceil(n*4/6)
-  b64 = calloc(bl, 1);
-  mask = 3;                // mask to get the bits that are not used in a sextet
-  cont = 2;                // first n bits to form the next sexteto
-  prev = 0;                // next value of the n=cont bits that were not used in the last sextet
-  i = j = 0;
+/**
+ * encode_b64: encodes text, an string, to base 64 and returns it
+ * 
+ * @param text, string: string to encode.
+ * @param length: length of the string.
+ * 
+ * @return char*, array of bytes: B64 encode.
+ */
+char* encode_b64(char* text, int length);
 
-  while(j<=bl){
-  
-    if(i<size){
-      aux = text[i] & mask;
-      val = text[i] >> cont;
-      
-      if(cont != 2)
-	val += prev;
-      else if(prev != 0) // for every cont = 2 except the first
-	  b64[j++] = prev;
-      
-      b64[j++] = val;
-      prev = aux<<(6-cont);
-    }
-    else{
-      aux = (cont==2)? 0 : cont;
-      b64[j++] = (text[size-1]<<aux)&63;
-    }
-    
-    cont = (cont==6)? 2:((cont+2)%8);  
-    mask = get_64mask(cont);
-    i++;
-  }
-  return b64;
-}
-
-/* Prints the b64 representation of the bytes */
-void print_b64(char* b64, int size)
-{
-  int i = ceil(size*4/3.0);
-
-  for(int j = 0; j < i; j++){
-    if(b64[j] <= 25)
-      printf("%c", b64[j]+65);
-    else if(b64[j] <= 51)
-      printf("%c", b64[j]+71);
-    else if(b64[j] <= 61)
-      printf("%c", b64[j]-4);
-    else if(b64[j] == 62)
-      printf("%c", 42);
-    else
-      printf("%c", 47);
-  }
-  printf("\n");
-}
+/**
+ * print_b63: prints the b64 representation of the bytes 
+ *
+ * @param b63, char*: array of bytes.
+ * @param size, int. size of the array.
+ */
+void print_b64(char* b64, int size);
 
 /********************** XOR **********************/
 
-/* takes two string with same length and returns it's xor combination as 
-   a string 
-   Note: length, size of both strings.
+/**
+ * xor: takes two string with same length and returns it's xor combination as 
+ *      an array of bytes.
+ * @param d1, string:  string to xor #1.
+ * @param d2, string:  string to xor #2.
+ * @param length, int: length of both d1 and d2.
 */
-char* xor(char* d1, char* d2, int length)
-{
-  int i, j, sum;
-  char *xor, a, b, mask;
-
-  xor = malloc(length);
-
-  sum = 0;
-  for(j = 0; j < length; xor[j++] = sum, sum = 0)
-    for(i = 7; i>=0; i--){
-      mask = 1<<i;
-      a = d1[j] & mask;
-      b = d2[j] & mask;
-      if(a!=b)
-	sum += mask;
-    }
-  
-  xor[j] = '\0';
-  return xor;
-}
+char* xor(char* d1, char* d2, int length);
