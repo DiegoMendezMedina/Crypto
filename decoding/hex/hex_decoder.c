@@ -79,7 +79,7 @@ int read_hex(char* hex)
   if(i==MAXLINE){
     printf("error: input exceeded MAXLINE\n");
     return -1;
-  } 
-
+  }
+  
   return i;
 }
